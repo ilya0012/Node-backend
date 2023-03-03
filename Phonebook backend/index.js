@@ -1,8 +1,12 @@
-const { request, response } = require('express')
+
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan(':method :url :status - :response-time ms :req-body'))
+
+morgan.token('req-body', (req, res) => JSON.stringify(req.body));
 
 let persons = [
     { 
@@ -82,6 +86,7 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+
   const person = {
     id: generateId(),
     name: body.name,
@@ -92,6 +97,7 @@ app.post('/api/persons', (request, response) => {
 
   response.json(person)
 })
+
 
 const PORT = 3001
 app.listen(PORT)
